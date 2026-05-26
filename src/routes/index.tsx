@@ -4,11 +4,11 @@ import { motion, useInView, useMotionValue, useTransform, animate } from "framer
 import useEmblaCarousel from "embla-carousel-react";
 import {
   Zap, Menu, X, ArrowRight, ArrowLeft, Search, Target, Share2, Palette,
-  PenTool, Mail, Check, Star, TrendingUp, Users, Award, Calendar,
+  PenTool, Mail, Check, X as XIcon, Star, TrendingUp, Users, Award, Calendar,
   AlertTriangle, MapPin, Phone, Clock, Instagram, Linkedin, Twitter, Youtube, Facebook,
-  BarChart3, Megaphone, ShieldCheck, Sparkles, ChevronRight, Rocket,
+  BarChart3, Megaphone, ShieldCheck, Sparkles, ChevronRight, Rocket, BadgeCheck,
+  ArrowUp, Globe, Flame, Layers, Hexagon, Triangle, Circle as CircleIcon,
 } from "lucide-react";
-import heroDashboard from "@/assets/hero-dashboard.png";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/")({
 /* ---------- Reusable bits ---------- */
 function Section({ id, children, className = "" }: { id?: string; children: React.ReactNode; className?: string }) {
   return (
-    <section id={id} className={`relative py-24 px-6 md:px-10 ${className}`}>
+    <section id={id} className={`relative py-20 md:py-24 px-5 sm:px-6 md:px-10 ${className}`}>
       <div className="mx-auto max-w-7xl">{children}</div>
     </section>
   );
@@ -41,17 +41,18 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 
 function Counter({ to, suffix = "", prefix = "" }: { to: number; suffix?: string; prefix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-50px" });
+  const inView = useInView(ref, { once: true, margin: "-80px" });
   const mv = useMotionValue(0);
   const rounded = useTransform(mv, (v) => Math.round(v).toLocaleString("en-IN"));
   useEffect(() => {
     if (inView) {
-      const controls = animate(mv, to, { duration: 1.8, ease: "easeOut" });
+      mv.set(0);
+      const controls = animate(mv, to, { duration: 2, ease: [0.22, 1, 0.36, 1] });
       return controls.stop;
     }
   }, [inView, to, mv]);
   return (
-    <span ref={ref} className="tabular-nums">
+    <span ref={ref} className="tabular-nums inline-flex items-baseline">
       {prefix}<motion.span>{rounded}</motion.span>{suffix}
     </span>
   );
@@ -87,8 +88,8 @@ function Navbar() {
     { href: "#contact", label: "Contact" },
   ];
   return (
-    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "py-3" : "py-5"}`}>
-      <div className={`mx-auto max-w-7xl px-5 md:px-8 transition-all duration-300 ${scrolled ? "glass-strong rounded-2xl mx-4 md:mx-auto" : ""}`}>
+    <header className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "py-2" : "py-5"}`}>
+      <div className={`mx-auto max-w-7xl px-4 sm:px-6 md:px-8 transition-all duration-300 ${scrolled ? "glass-strong rounded-2xl mx-3 md:mx-auto backdrop-blur-xl" : ""}`}>
         <div className="flex items-center justify-between h-14">
           <a href="#home" className="flex items-center gap-2 group">
             <div className="relative h-9 w-9 rounded-xl bg-gradient-cta grid place-items-center shadow-glow-orange">
@@ -104,7 +105,7 @@ function Navbar() {
               </a>
             ))}
           </nav>
-          <a href="#contact" className="hidden md:inline-flex items-center gap-2 rounded-full bg-gradient-cta px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-glow-orange hover:scale-105 transition-transform">
+          <a href="#contact" className="hidden md:inline-flex items-center gap-2 rounded-full bg-gradient-cta px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-glow-orange hover:scale-105 transition-transform animate-cta-pulse">
             Get Free Consultation <ArrowRight size={16} />
           </a>
           <button className="md:hidden text-foreground" onClick={() => setOpen(!open)} aria-label="Menu">
@@ -128,17 +129,114 @@ function Navbar() {
   );
 }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero with HTML/CSS analytics mockup ---------- */
+function DashboardMockup() {
+  const bars = [42, 65, 38, 78, 55, 88, 72, 95, 60, 82, 70, 100];
+  return (
+    <div className="relative animate-float-y">
+      {/* glowing gradient behind */}
+      <div className="absolute -inset-10 bg-gradient-to-br from-brand-blue/30 via-primary/30 to-brand-orange/30 blur-3xl rounded-full opacity-70" />
+
+      <div className="relative glass-strong rounded-3xl p-5 md:p-6 shadow-glow-blue">
+        {/* Window chrome */}
+        <div className="flex items-center justify-between pb-4 border-b border-border">
+          <div className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-destructive/80" />
+            <span className="h-2.5 w-2.5 rounded-full bg-brand-orange/80" />
+            <span className="h-2.5 w-2.5 rounded-full bg-success/80" />
+          </div>
+          <div className="text-[10px] text-muted-foreground font-mono">aprisity.dashboard / analytics</div>
+          <div className="text-[10px] text-success font-semibold">● LIVE</div>
+        </div>
+
+        {/* Metric cards */}
+        <div className="mt-4 grid grid-cols-3 gap-2.5">
+          {[
+            { l: "Organic Traffic", v: "+340%", c: "text-brand-blue" },
+            { l: "Conversions",   v: "+180%", c: "text-success" },
+            { l: "ROI",            v: "300%",  c: "text-brand-orange" },
+          ].map((m) => (
+            <div key={m.l} className="glass rounded-xl p-3">
+              <div className="text-[9px] uppercase tracking-wider text-muted-foreground">{m.l}</div>
+              <div className={`mt-1 text-base md:text-lg font-bold ${m.c}`}>{m.v}</div>
+              <div className="mt-1 h-1 rounded-full bg-white/10 overflow-hidden">
+                <div className={`h-full ${m.c.replace("text-", "bg-")}`} style={{ width: "78%" }} />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Chart + donut */}
+        <div className="mt-4 grid grid-cols-5 gap-3">
+          {/* Bar chart */}
+          <div className="col-span-3 glass rounded-xl p-3">
+            <div className="flex items-center justify-between">
+              <div className="text-[10px] font-semibold">Revenue Growth</div>
+              <div className="text-[10px] text-success">▲ 24.8%</div>
+            </div>
+            <div className="mt-3 h-28 flex items-end gap-1.5">
+              {bars.map((h, i) => (
+                <div key={i} className="flex-1 rounded-t-sm bg-gradient-to-t from-brand-blue to-primary animate-bar"
+                     style={{ height: `${h}%`, animationDelay: `${i * 80}ms` }} />
+              ))}
+            </div>
+            <div className="mt-2 flex justify-between text-[8px] text-muted-foreground">
+              <span>Jan</span><span>Mar</span><span>Jun</span><span>Sep</span><span>Dec</span>
+            </div>
+          </div>
+
+          {/* Donut */}
+          <div className="col-span-2 glass rounded-xl p-3 flex flex-col items-center">
+            <div className="text-[10px] font-semibold self-start">Traffic Sources</div>
+            <div className="relative mt-2 h-24 w-24">
+              <svg viewBox="0 0 36 36" className="h-full w-full -rotate-90">
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="oklch(1 0 0 / 0.08)" strokeWidth="3.5" />
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--brand-blue)" strokeWidth="3.5" strokeDasharray="48 100" strokeLinecap="round" />
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--brand-orange)" strokeWidth="3.5" strokeDasharray="28 100" strokeDashoffset="-48" strokeLinecap="round" />
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="var(--success)" strokeWidth="3.5" strokeDasharray="24 100" strokeDashoffset="-76" strokeLinecap="round" />
+              </svg>
+              <div className="absolute inset-0 grid place-items-center">
+                <div className="text-center">
+                  <div className="text-sm font-bold">48%</div>
+                  <div className="text-[8px] text-muted-foreground">Organic</div>
+                </div>
+              </div>
+            </div>
+            <div className="mt-2 space-y-1 w-full text-[9px]">
+              <div className="flex items-center justify-between"><span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-brand-blue" />Organic</span><span>48%</span></div>
+              <div className="flex items-center justify-between"><span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-brand-orange" />Paid Ads</span><span>28%</span></div>
+              <div className="flex items-center justify-between"><span className="flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-success" />Social</span><span>24%</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Floating notification card */}
+      <div className="absolute -bottom-6 -left-4 md:-left-8 glass-strong rounded-2xl px-4 py-3 shadow-glow-orange max-w-[200px] animate-float-y" style={{ animationDelay: "1.5s" }}>
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-full bg-gradient-cta grid place-items-center">
+            <TrendingUp size={14} className="text-brand-orange-foreground" />
+          </div>
+          <div>
+            <div className="text-[10px] text-muted-foreground">New conversion</div>
+            <div className="text-xs font-bold text-success">+ ₹12,400</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   return (
-    <section id="home" className="relative pt-36 pb-20 px-6 md:px-10 overflow-hidden">
+    <section id="home" className="relative pt-32 md:pt-36 pb-20 px-5 sm:px-6 md:px-10 overflow-hidden">
       {/* gradient orbs */}
       <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-brand-blue/20 blur-3xl animate-float" />
       <div className="absolute top-40 right-0 w-[28rem] h-[28rem] rounded-full bg-brand-orange/15 blur-3xl animate-float-slow" />
       <div className="absolute bottom-0 left-1/3 w-80 h-80 rounded-full bg-primary/15 blur-3xl animate-pulse-glow" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,oklch(0.30_0.12_270/0.4),transparent_60%)]" />
+      <div className="noise-overlay" />
 
-      <div className="relative mx-auto max-w-7xl grid lg:grid-cols-2 gap-12 items-center">
+      <div className="relative mx-auto max-w-7xl grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <FadeIn>
           <Eyebrow>Performance Marketing Agency</Eyebrow>
           <h1 className="mt-5 text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
@@ -149,8 +247,9 @@ function Hero() {
             Results-driven. ROI-focused.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <a href="#contact" className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta px-7 py-3.5 text-base font-semibold text-brand-orange-foreground shadow-glow-orange hover:scale-105 transition-transform">
-              Get Free Strategy Call <ArrowRight size={18} />
+            <a href="#contact" className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta px-7 py-3.5 text-base font-semibold text-brand-orange-foreground shadow-glow-orange hover:scale-105 transition-transform animate-cta-pulse">
+              Get Free Strategy Call
+              <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
             </a>
             <a href="#services" className="inline-flex items-center justify-center gap-2 rounded-full border border-border glass px-7 py-3.5 text-base font-semibold hover:border-brand-blue/60 transition-colors">
               View Our Work
@@ -171,18 +270,7 @@ function Hero() {
         </FadeIn>
 
         <FadeIn delay={0.2} y={40}>
-          <div className="relative">
-            <div className="absolute -inset-8 bg-brand-blue/20 blur-3xl rounded-full" />
-            <motion.img
-              src={heroDashboard}
-              alt="Analytics dashboard"
-              width={1280}
-              height={1024}
-              className="relative w-full drop-shadow-2xl"
-              animate={{ y: [0, -12, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </div>
+          <DashboardMockup />
         </FadeIn>
       </div>
     </section>
@@ -211,10 +299,10 @@ function PainPoints() {
       <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((it, i) => (
           <FadeIn key={it.t} delay={i * 0.07}>
-            <div className="group glass rounded-2xl p-6 h-full hover:shadow-glow-red transition-all hover:-translate-y-1 hover:border-destructive/40 relative overflow-hidden">
+            <div className="group relative glass rounded-2xl p-6 h-full border-l-4 border-l-destructive/60 hover:bg-destructive/5 hover:shadow-glow-red transition-all hover:-translate-y-1 overflow-hidden">
               <div className="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-destructive/10 blur-2xl group-hover:bg-destructive/20 transition-colors" />
               <div className="relative">
-                <div className="h-12 w-12 rounded-xl bg-destructive/15 grid place-items-center text-destructive">
+                <div className="h-12 w-12 rounded-xl bg-destructive/15 grid place-items-center text-destructive ring-1 ring-destructive/30">
                   <AlertTriangle size={22} />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold">{it.t}</h3>
@@ -228,7 +316,7 @@ function PainPoints() {
   );
 }
 
-/* ---------- Solution ---------- */
+/* ---------- Solutions ---------- */
 function Solutions() {
   const blocks = [
     { icon: TrendingUp, t: "Traffic That Converts", d: "SEO + content strategy engineered to attract qualified buyers — not just visitors. We rank you for the keywords that actually drive revenue." },
@@ -244,7 +332,7 @@ function Solutions() {
         </div>
       </FadeIn>
 
-      <div className="mt-20 space-y-24">
+      <div className="mt-20 space-y-20 md:space-y-24">
         {blocks.map((b, i) => {
           const reverse = i % 2 === 1;
           return (
@@ -297,8 +385,8 @@ function Solutions() {
 function Services() {
   const services = [
     { icon: Search, t: "SEO & Search Visibility", d: "Rank #1 on Google and drive organic traffic that converts into real customers.", cta: "Explore SEO" },
-    { icon: Target, t: "Paid Advertising (PPC & Meta Ads)", d: "Maximize your ad spend with laser-targeted campaigns across Google, Meta & more.", cta: "Explore Paid Ads" },
-    { icon: Share2, t: "Social Media Marketing", d: "Build a loyal community and drive engagement across Instagram, LinkedIn & Facebook.", cta: "Explore Social Media" },
+    { icon: Target, t: "Paid Advertising (PPC & Meta)", d: "Maximize your ad spend with laser-targeted campaigns across Google, Meta & more.", cta: "Explore Paid Ads" },
+    { icon: Share2, t: "Social Media Marketing", d: "Build a loyal community and drive engagement across Instagram, LinkedIn & Facebook.", cta: "Explore Social" },
     { icon: Palette, t: "Branding & Identity", d: "Create a powerful brand identity that builds trust and stands out in the market.", cta: "Explore Branding" },
     { icon: PenTool, t: "Content Creation & Strategy", d: "Compelling content that educates your audience and drives them to take action.", cta: "Explore Content" },
     { icon: Mail, t: "Email Marketing & Automation", d: "Nurture leads and retain customers with personalized email sequences that convert.", cta: "Explore Email" },
@@ -313,7 +401,7 @@ function Services() {
     setSnaps(emblaApi.scrollSnapList());
     emblaApi.on("select", onSelect);
     onSelect();
-    const interval = setInterval(() => emblaApi.scrollNext(), 4500);
+    const interval = setInterval(() => emblaApi.scrollNext(), 3000);
     return () => { clearInterval(interval); emblaApi.off("select", onSelect); };
   }, [emblaApi]);
 
@@ -327,10 +415,10 @@ function Services() {
             <p className="mt-4 text-muted-foreground">A full-stack growth team for brands that mean business.</p>
           </div>
           <div className="flex gap-3">
-            <button onClick={() => emblaApi?.scrollPrev()} className="h-12 w-12 rounded-full glass hover:bg-brand-blue/20 grid place-items-center" aria-label="Previous">
+            <button onClick={() => emblaApi?.scrollPrev()} className="h-12 w-12 rounded-full glass hover:bg-brand-blue/20 grid place-items-center transition-colors" aria-label="Previous">
               <ArrowLeft size={18} />
             </button>
-            <button onClick={() => emblaApi?.scrollNext()} className="h-12 w-12 rounded-full bg-gradient-cta shadow-glow-orange grid place-items-center text-brand-orange-foreground" aria-label="Next">
+            <button onClick={() => emblaApi?.scrollNext()} className="h-12 w-12 rounded-full bg-gradient-cta shadow-glow-orange grid place-items-center text-brand-orange-foreground hover:scale-105 transition-transform" aria-label="Next">
               <ArrowRight size={18} />
             </button>
           </div>
@@ -338,19 +426,19 @@ function Services() {
       </FadeIn>
 
       <div className="mt-12 overflow-hidden -mx-4" ref={emblaRef}>
-        <div className="flex">
+        <div className="flex transition-transform duration-700 ease-out">
           {services.map((s) => (
             <div key={s.t} className="flex-[0_0_85%] sm:flex-[0_0_50%] lg:flex-[0_0_33.333%] px-4">
-              <div className="group glass rounded-3xl p-7 h-full hover:-translate-y-2 transition-all duration-300 hover:shadow-glow-blue relative overflow-hidden">
-                <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-brand-blue/10 blur-2xl group-hover:bg-brand-orange/20 transition-colors" />
+              <div className="group glass rounded-3xl p-7 h-full hover:-translate-y-2 transition-all duration-300 hover:shadow-glow-blue hover:border-brand-blue/50 relative overflow-hidden">
+                <div className="absolute -top-16 -right-16 w-40 h-40 rounded-full bg-brand-blue/10 blur-2xl group-hover:bg-brand-blue/25 transition-colors" />
                 <div className="relative">
-                  <div className="h-14 w-14 rounded-2xl bg-gradient-blue grid place-items-center shadow-glow-blue group-hover:bg-gradient-cta group-hover:shadow-glow-orange transition-all">
+                  <div className="h-14 w-14 rounded-full bg-gradient-blue grid place-items-center shadow-glow-blue group-hover:shadow-glow-orange transition-all">
                     <s.icon size={26} className="text-primary-foreground" />
                   </div>
                   <h3 className="mt-5 text-xl font-bold">{s.t}</h3>
                   <p className="mt-3 text-sm text-muted-foreground leading-relaxed min-h-[4.5rem]">{s.d}</p>
-                  <a href="#contact" className="mt-6 inline-flex items-center gap-2 text-brand-orange font-semibold text-sm group/cta">
-                    {s.cta} <ArrowRight size={16} className="group-hover/cta:translate-x-1 transition-transform" />
+                  <a href="#contact" className="mt-6 inline-flex items-center gap-2 rounded-full bg-gradient-cta px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-glow-orange hover:scale-105 transition-transform">
+                    {s.cta} <ArrowRight size={14} />
                   </a>
                 </div>
               </div>
@@ -398,14 +486,21 @@ function Pricing() {
     },
   ];
 
-  const compareRows = [
+  const compareRows: Array<[string, string | boolean, string | boolean, string | boolean, string | boolean]> = [
     ["SEO", "Basic", "Advanced", "Full Suite", "Enterprise"],
     ["Social Platforms", "2", "3 + Reels", "All", "All + PR"],
-    ["Paid Ads", "—", "Google + Meta", "Google + Meta + LinkedIn", "Custom"],
-    ["Dedicated Manager", "—", "—", "✓", "Team of 5+"],
+    ["Paid Ads", false, "Google + Meta", "Google + Meta + LinkedIn", "Custom"],
+    ["Dedicated Manager", false, false, true, "Team of 5+"],
     ["Reporting", "Monthly", "Bi-weekly", "Weekly", "Real-time"],
     ["Support", "Email", "WhatsApp", "24/7 Priority", "SLA-backed"],
+    ["Conversion Optimization", false, false, true, true],
   ];
+
+  const renderCell = (v: string | boolean) => {
+    if (v === true) return <Check size={18} className="text-success mx-auto" />;
+    if (v === false) return <XIcon size={18} className="text-muted-foreground/50 mx-auto" />;
+    return <span>{v}</span>;
+  };
 
   return (
     <Section id="pricing">
@@ -417,18 +512,27 @@ function Pricing() {
         </div>
       </FadeIn>
 
-      <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
         {plans.map((p, i) => (
           <FadeIn key={p.name} delay={i * 0.08}>
-            <div className={`relative h-full rounded-3xl p-7 flex flex-col ${
+            <div className={`relative h-full rounded-3xl p-7 flex flex-col transition-all hover:-translate-y-2 ${
               p.featured
-                ? "bg-gradient-to-b from-brand-blue/20 to-brand-orange/10 border-2 border-brand-orange/50 shadow-glow-orange scale-[1.02]"
-                : "glass hover:border-brand-blue/40 transition-colors"
+                ? "bg-gradient-to-b from-brand-blue/15 via-card/50 to-brand-orange/10 animate-border-glow lg:scale-[1.06] lg:-my-2"
+                : "glass bg-gradient-to-b from-white/[0.04] to-transparent hover:shadow-glow-blue hover:border-brand-blue/40"
             }`}>
               {p.featured && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 rounded-full bg-gradient-cta px-3 py-1 text-xs font-bold text-brand-orange-foreground shadow-glow-orange">
-                  <Star size={12} fill="currentColor" /> MOST POPULAR
-                </div>
+                <>
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center gap-1 rounded-full bg-gradient-cta px-3 py-1 text-xs font-bold text-brand-orange-foreground shadow-glow-orange whitespace-nowrap">
+                    <Star size={12} fill="currentColor" /> MOST POPULAR
+                  </div>
+                  {/* BEST VALUE ribbon */}
+                  <div className="absolute -right-2 top-5 z-10">
+                    <div className="relative bg-gradient-cta text-brand-orange-foreground text-[10px] font-extrabold px-3 py-1 shadow-glow-orange">
+                      BEST VALUE
+                      <span className="absolute -bottom-1 right-0 border-t-4 border-r-4 border-t-transparent border-r-transparent" style={{ borderTopColor: "oklch(0.55 0.18 30)", borderRightColor: "oklch(0.55 0.18 30)" }} />
+                    </div>
+                  </div>
+                </>
               )}
               <div className="text-xs uppercase tracking-wider text-brand-blue font-semibold">{p.tag}</div>
               <h3 className="mt-2 text-xl font-bold">{p.name}</h3>
@@ -438,15 +542,17 @@ function Pricing() {
               </div>
               <ul className="mt-6 space-y-3 flex-1">
                 {p.features.map((f) => (
-                  <li key={f} className="flex gap-2 text-sm">
-                    <Check size={18} className={p.featured ? "text-brand-orange shrink-0" : "text-brand-blue shrink-0"} />
+                  <li key={f} className="flex gap-2.5 text-sm">
+                    <span className="mt-0.5 h-5 w-5 rounded-full bg-success/15 grid place-items-center shrink-0">
+                      <Check size={12} className="text-success" strokeWidth={3} />
+                    </span>
                     <span className="text-muted-foreground">{f}</span>
                   </li>
                 ))}
               </ul>
               <a href="#contact" className={`mt-7 inline-flex items-center justify-center gap-2 rounded-full py-3 text-sm font-semibold transition-all ${
                 p.featured
-                  ? "bg-gradient-cta text-brand-orange-foreground shadow-glow-orange hover:scale-105 animate-pulse-glow"
+                  ? "bg-gradient-cta text-brand-orange-foreground shadow-glow-orange hover:scale-105 animate-cta-pulse"
                   : "border border-border glass hover:border-brand-orange/60"
               }`}>
                 {p.cta} <ArrowRight size={16} />
@@ -458,23 +564,30 @@ function Pricing() {
 
       {/* Comparison table */}
       <FadeIn>
-        <div className="mt-16 glass rounded-3xl p-2 overflow-x-auto">
-          <table className="w-full text-sm min-w-[640px]">
+        <div className="mt-20 glass rounded-3xl p-2 overflow-x-auto">
+          <table className="w-full text-sm min-w-[720px] border-separate border-spacing-0">
             <thead>
-              <tr className="text-left">
-                <th className="p-4 font-semibold text-muted-foreground">Feature</th>
-                {plans.map((p) => (
-                  <th key={p.name} className={`p-4 font-bold ${p.featured ? "text-brand-orange" : ""}`}>{p.name}</th>
+              <tr>
+                <th className="sticky left-0 z-10 bg-gradient-to-r from-brand-blue/20 to-primary/20 backdrop-blur-md p-4 text-left rounded-tl-2xl font-semibold">Feature</th>
+                {plans.map((p, idx) => (
+                  <th key={p.name} className={`p-4 font-bold text-center ${idx === plans.length - 1 ? "rounded-tr-2xl" : ""} ${p.featured ? "text-brand-orange bg-brand-blue/15" : "bg-gradient-to-r from-brand-blue/20 to-primary/20"}`}>
+                    {p.name}
+                  </th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {compareRows.map((row) => (
-                <tr key={row[0]} className="border-t border-border">
-                  <td className="p-4 font-medium text-muted-foreground">{row[0]}</td>
-                  {row.slice(1).map((cell, i) => (
-                    <td key={i} className="p-4">{cell}</td>
-                  ))}
+              {compareRows.map((row, ri) => (
+                <tr key={row[0] as string} className={ri % 2 === 0 ? "bg-white/[0.02]" : ""}>
+                  <td className="sticky left-0 z-10 bg-card/95 backdrop-blur-md p-4 font-medium text-foreground border-t border-border">{row[0]}</td>
+                  {row.slice(1).map((cell, i) => {
+                    const isFeatured = i === 2;
+                    return (
+                      <td key={i} className={`p-4 text-center border-t border-border ${isFeatured ? "bg-brand-blue/10" : ""}`}>
+                        {renderCell(cell as string | boolean)}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))}
             </tbody>
@@ -487,7 +600,16 @@ function Pricing() {
 
 /* ---------- Social Proof ---------- */
 function SocialProof() {
-  const logos = ["TechNova", "BuildRight", "FashionCo", "EduSpark", "HealthPlus", "RetailMax"];
+  const logos = [
+    { n: "TechNova", Icon: Hexagon, color: "text-brand-blue", weight: "font-black" },
+    { n: "BuildRight", Icon: Triangle, color: "text-brand-orange", weight: "font-bold italic" },
+    { n: "FashionCo", Icon: Sparkles, color: "text-foreground", weight: "font-extralight tracking-[0.25em]" },
+    { n: "EduSpark", Icon: Flame, color: "text-warn", weight: "font-bold" },
+    { n: "HealthPlus", Icon: ShieldCheck, color: "text-success", weight: "font-semibold" },
+    { n: "RetailMax", Icon: Layers, color: "text-primary", weight: "font-extrabold uppercase tracking-tight" },
+    { n: "GlobalPay", Icon: Globe, color: "text-brand-blue", weight: "font-bold" },
+    { n: "FinEdge", Icon: CircleIcon, color: "text-brand-orange", weight: "font-black tracking-tighter" },
+  ];
   const cases = [
     { t: "TechNova SaaS", d: "340% increase in organic traffic in 6 months", metric: "+340%", tag: "SEO" },
     { t: "FashionCo", d: "₹80L revenue generated through Meta Ads in Q1", metric: "₹80L", tag: "Paid Ads" },
@@ -499,6 +621,15 @@ function SocialProof() {
     { n: "Amit Verma", r: "Director, EduSpark", q: "Best digital marketing agency we have worked with. Results speak for themselves." },
     { n: "Neha Singh", r: "CMO, HealthPlus", q: "Professional team, transparent reporting, and outstanding results every single month." },
   ];
+  const avatarColors = ["4F8EF7", "FF6B35", "8B5CF6", "10B981"];
+
+  const LogoItem = ({ l }: { l: typeof logos[number] }) => (
+    <div className="flex items-center gap-2.5 px-5 whitespace-nowrap">
+      <l.Icon size={22} className={l.color} strokeWidth={2.2} />
+      <span className={`text-xl ${l.weight} ${l.color}`}>{l.n}</span>
+    </div>
+  );
+
   return (
     <Section id="about">
       <FadeIn>
@@ -508,15 +639,18 @@ function SocialProof() {
         </div>
       </FadeIn>
 
+      {/* Logos marquee */}
       <FadeIn>
-        <div className="mt-12 glass rounded-3xl p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center">
-          {logos.map((l) => (
-            <div key={l} className="text-center">
-              <div className="text-lg md:text-xl font-bold tracking-tight text-muted-foreground hover:text-foreground transition-colors">
-                {l}
-              </div>
+        <div className="mt-12 glass-strong rounded-3xl py-6">
+          <div className="px-6 mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground text-center">Our Clients</div>
+          <div className="marquee">
+            <div className="marquee-track">
+              {logos.map((l) => <LogoItem key={l.n} l={l} />)}
             </div>
-          ))}
+            <div className="marquee-track" aria-hidden="true">
+              {logos.map((l) => <LogoItem key={l.n + "-2"} l={l} />)}
+            </div>
+          </div>
         </div>
       </FadeIn>
 
@@ -540,18 +674,32 @@ function SocialProof() {
         ))}
       </div>
 
-      {/* Testimonials */}
+      {/* Testimonials with avatars */}
       <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {testimonials.map((t, i) => (
           <FadeIn key={t.n} delay={i * 0.08}>
-            <div className="glass rounded-2xl p-6 h-full hover:border-brand-orange/40 transition-colors">
+            <div className="relative glass rounded-2xl p-6 h-full hover:-translate-y-1 transition-all overflow-hidden">
+              {/* gradient left border */}
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-brand-blue to-brand-orange" />
               <div className="flex gap-1 text-brand-orange">
                 {[...Array(5)].map((_, j) => <Star key={j} size={14} fill="currentColor" />)}
               </div>
               <p className="mt-4 text-sm text-muted-foreground leading-relaxed">"{t.q}"</p>
-              <div className="mt-5 pt-5 border-t border-border">
-                <div className="font-semibold text-sm">{t.n}</div>
-                <div className="text-xs text-muted-foreground">{t.r}</div>
+              <div className="mt-5 pt-5 border-t border-border flex items-center gap-3">
+                <img
+                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(t.n)}&background=${avatarColors[i % avatarColors.length]}&color=fff&size=96&bold=true`}
+                  alt={t.n}
+                  width={40}
+                  height={40}
+                  className="h-10 w-10 rounded-full ring-2 ring-white/10"
+                />
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1 font-semibold text-sm">
+                    <span className="truncate">{t.n}</span>
+                    <BadgeCheck size={14} className="text-brand-blue shrink-0" />
+                  </div>
+                  <div className="text-xs text-muted-foreground truncate">{t.r}</div>
+                </div>
               </div>
             </div>
           </FadeIn>
@@ -583,14 +731,25 @@ function SocialProof() {
 
 /* ---------- Final CTA ---------- */
 function FinalCTA() {
+  // Pre-computed particle positions
+  const particles = Array.from({ length: 18 }, (_, i) => ({
+    left: `${(i * 53) % 100}%`,
+    delay: `${(i * 0.4) % 7}s`,
+    size: 4 + (i % 3) * 2,
+  }));
   return (
     <Section>
       <FadeIn>
-        <div className="relative rounded-[2rem] overflow-hidden p-10 md:p-20 text-center">
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/30 via-primary/20 to-brand-orange/30" />
+        <div className="relative rounded-[2rem] overflow-hidden p-10 md:p-20 text-center animated-gradient">
+          <div className="absolute inset-0 backdrop-blur-2xl bg-background/30" />
+          {/* particles */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {particles.map((p, i) => (
+              <span key={i} className="particle" style={{ left: p.left, bottom: 0, width: p.size, height: p.size, animationDelay: p.delay }} />
+            ))}
+          </div>
           <div className="absolute -top-20 -left-20 w-80 h-80 rounded-full bg-brand-blue/40 blur-3xl animate-pulse-glow" />
           <div className="absolute -bottom-20 -right-20 w-96 h-96 rounded-full bg-brand-orange/30 blur-3xl animate-float" />
-          <div className="absolute inset-0 backdrop-blur-3xl glass-strong" />
 
           <div className="relative">
             <Rocket size={48} className="mx-auto text-brand-orange mb-4" />
@@ -600,10 +759,12 @@ function FinalCTA() {
             <p className="mt-5 max-w-2xl mx-auto text-lg text-muted-foreground">
               Book a FREE 30-minute strategy call with our experts and get a custom growth plan for your business.
             </p>
-            <a href="#contact" className="mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-cta px-8 py-4 text-base md:text-lg font-bold text-brand-orange-foreground shadow-glow-orange hover:scale-105 transition-transform">
-              Book My Free Strategy Call <ArrowRight size={20} />
+            <a href="#contact" className="group mt-8 inline-flex items-center gap-3 rounded-full bg-gradient-cta px-10 py-5 text-base md:text-lg font-bold text-brand-orange-foreground shadow-glow-orange hover:scale-105 transition-transform animate-cta-pulse">
+              Book My Free Strategy Call
+              <ArrowRight size={22} className="transition-transform group-hover:translate-x-1.5" />
             </a>
-            <p className="mt-4 text-xs text-muted-foreground">No credit card required. No obligations. Just results.</p>
+            <p className="mt-5 text-sm font-medium text-brand-orange">⚡ Limited slots available this month</p>
+            <p className="mt-2 text-xs text-muted-foreground">No credit card required. No obligations. Just results.</p>
           </div>
         </div>
       </FadeIn>
@@ -643,7 +804,7 @@ function Contact() {
               <textarea rows={4} required placeholder="Tell us about your goals..."
                 className="mt-2 w-full rounded-xl bg-input/50 border border-border px-4 py-3 text-sm focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/30 focus:outline-none transition-all" />
             </div>
-            <button type="submit" className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta py-4 text-base font-bold text-brand-orange-foreground shadow-glow-orange hover:scale-[1.02] transition-transform">
+            <button type="submit" className="w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta py-4 text-base font-bold text-brand-orange-foreground shadow-glow-orange hover:scale-[1.02] transition-transform animate-cta-pulse">
               {sent ? "Sent! We'll be in touch ✓" : <>Send My Inquiry <ArrowRight size={18} /></>}
             </button>
           </form>
@@ -711,9 +872,17 @@ function Footer() {
     { t: "Resources", l: ["Free SEO Audit", "Marketing Guides", "ROI Calculator", "Webinars", "Help Center"] },
     { t: "Legal", l: ["Privacy Policy", "Terms of Service", "Cookie Policy", "GDPR", "Disclaimer"] },
   ];
-  const socials = [Instagram, Linkedin, Twitter, Youtube, Facebook];
+  const socials = [
+    { Icon: Instagram, color: "hover:text-[#E1306C]" },
+    { Icon: Linkedin,  color: "hover:text-[#0A66C2]" },
+    { Icon: Twitter,   color: "hover:text-[#1DA1F2]" },
+    { Icon: Youtube,   color: "hover:text-[#FF0000]" },
+    { Icon: Facebook,  color: "hover:text-[#1877F2]" },
+  ];
   return (
-    <footer className="relative border-t border-border mt-10">
+    <footer className="relative mt-10">
+      {/* gradient top line */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-brand-blue via-primary to-brand-orange" />
       <div className="absolute inset-0 bg-gradient-to-b from-transparent to-brand-blue/5 pointer-events-none" />
       <div className="relative mx-auto max-w-7xl px-6 md:px-10 py-16">
         <div className="grid lg:grid-cols-6 gap-10">
@@ -754,8 +923,8 @@ function Footer() {
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-sm text-muted-foreground">© 2025 AprisityDigital. All rights reserved.</div>
           <div className="flex gap-3">
-            {socials.map((Icon, i) => (
-              <a key={i} href="#" className="h-10 w-10 rounded-full glass grid place-items-center hover:bg-gradient-cta hover:shadow-glow-orange transition-all" aria-label="Social link">
+            {socials.map(({ Icon, color }, i) => (
+              <a key={i} href="#" className={`h-10 w-10 rounded-full glass grid place-items-center text-muted-foreground transition-colors ${color}`} aria-label="Social link">
                 <Icon size={16} />
               </a>
             ))}
@@ -763,6 +932,26 @@ function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+/* ---------- Back to top ---------- */
+function BackToTop() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShow(window.scrollY > 600);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  if (!show) return null;
+  return (
+    <button
+      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      aria-label="Back to top"
+      className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full bg-gradient-cta text-brand-orange-foreground shadow-glow-orange grid place-items-center hover:scale-110 transition-transform animate-cta-pulse"
+    >
+      <ArrowUp size={20} />
+    </button>
   );
 }
 
@@ -782,6 +971,7 @@ function LandingPage() {
         <Contact />
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }
