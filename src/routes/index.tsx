@@ -864,11 +864,11 @@ function Contact() {
         </div>
       </FadeIn>
 
-      <div className="mt-14 grid lg:grid-cols-5 gap-8">
+      <div className="mt-14 grid lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
         <FadeIn>
           <form
             onSubmit={(e) => { e.preventDefault(); setSent(true); setTimeout(() => setSent(false), 4000); }}
-            className="lg:col-span-3 glass-strong rounded-3xl p-7 md:p-10 space-y-5"
+            className="h-full glass-strong rounded-3xl p-6 sm:p-8 md:p-10 space-y-5"
           >
             <div className="grid sm:grid-cols-2 gap-5">
               <Field label="Full Name" type="text" placeholder="John Doe" />
@@ -891,28 +891,31 @@ function Contact() {
         </FadeIn>
 
         <FadeIn delay={0.1}>
-          <div className="lg:col-span-2 space-y-4">
+          <div className="h-full flex flex-col gap-3">
             {[
               { icon: Mail, t: "Email", v: "hello@aprisitydigital.com" },
               { icon: Phone, t: "Phone", v: "+91 98765 43210" },
               { icon: MapPin, t: "Location", v: "Bangalore, India" },
               { icon: Clock, t: "Working Hours", v: "Mon – Sat · 10AM – 7PM IST" },
+              { icon: Sparkles, t: "Response Time", v: "We reply within 2 hours" },
             ].map((c) => (
-              <div key={c.t} className="glass rounded-2xl p-5 flex items-center gap-4 hover:border-brand-blue/40 transition-colors">
-                <div className="h-12 w-12 rounded-xl bg-gradient-blue grid place-items-center shrink-0 shadow-glow-blue">
+              <div key={c.t} className="glass rounded-2xl p-4 flex items-center gap-4 hover:border-brand-blue/40 transition-colors">
+                <div className="h-11 w-11 rounded-xl bg-gradient-blue grid place-items-center shrink-0 shadow-glow-blue">
                   <c.icon size={20} className="text-primary-foreground" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-xs uppercase tracking-wider text-muted-foreground">{c.t}</div>
-                  <div className="text-sm font-semibold mt-0.5">{c.v}</div>
+                  <div className="text-sm font-semibold mt-0.5 truncate">{c.v}</div>
                 </div>
               </div>
             ))}
-            <div className="glass-strong rounded-2xl p-6 mt-6">
-              <Megaphone size={24} className="text-brand-orange" />
-              <p className="mt-3 text-sm text-muted-foreground">
-                We respond to every inquiry within 2 business hours. Your growth journey starts the moment you hit send.
-              </p>
+            <div className="glass-strong rounded-2xl p-5 mt-auto">
+              <div className="flex items-center gap-3">
+                <Megaphone size={22} className="text-brand-orange shrink-0" />
+                <p className="text-sm text-muted-foreground">
+                  Every inquiry gets a personal reply within 2 business hours. Your growth journey starts the moment you hit send.
+                </p>
+              </div>
             </div>
           </div>
         </FadeIn>
