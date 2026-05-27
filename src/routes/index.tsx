@@ -317,146 +317,146 @@ function PainPoints() {
 }
 
 /* ---------- Solutions ---------- */
-function TrafficMockup() {
-  const bars = [
-    { m: "Jan", h: 28 }, { m: "Feb", h: 44 }, { m: "Mar", h: 58 }, { m: "Apr", h: 76 }, { m: "May", h: 96 },
-  ];
+function SolutionCard({
+  icon: Icon, title, desc, gradient, badge, badgeTone, delay,
+}: {
+  icon: typeof TrendingUp; title: string; desc: string; gradient: string;
+  badge: string; badgeTone: "green" | "orange" | "blue"; delay: number;
+}) {
+  const toneClass =
+    badgeTone === "green" ? "bg-success/15 text-success border-success/25"
+    : badgeTone === "orange" ? "bg-brand-orange/15 text-brand-orange border-brand-orange/30"
+    : "bg-brand-blue/15 text-brand-blue border-brand-blue/30";
   return (
-    <div className="glass-strong rounded-3xl p-6 md:p-8 aspect-[4/3] relative overflow-hidden">
-      <div className="absolute -bottom-10 -right-10 w-48 h-48 rounded-full bg-brand-blue/20 blur-3xl" />
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="text-xs text-muted-foreground">Organic Traffic</div>
-          <div className="text-2xl font-bold mt-1">+340% <span className="text-sm text-success">▲</span></div>
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, delay: delay / 1000, ease: "easeOut" }}
+      className="group relative rounded-2xl p-6 md:p-8 border transition-all duration-300 hover:-translate-y-1"
+      style={{
+        background: "rgba(255,255,255,0.03)",
+        borderColor: "rgba(255,255,255,0.08)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "rgba(79,142,247,0.4)";
+        e.currentTarget.style.boxShadow = "0 0 30px rgba(79,142,247,0.15)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
+        e.currentTarget.style.boxShadow = "none";
+      }}
+    >
+      {/* Decorator */}
+      <div className="mx-auto relative h-20 w-20 md:h-[120px] md:w-[120px] grid place-items-center"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
+          backgroundSize: "20px 20px",
+          WebkitMaskImage: "radial-gradient(ellipse 50% 50% at 50% 50%, black 60%, transparent 100%)",
+          maskImage: "radial-gradient(ellipse 50% 50% at 50% 50%, black 60%, transparent 100%)",
+        }}
+      >
+        <div
+          className="h-12 w-12 rounded-xl grid place-items-center shadow-lg"
+          style={{ background: gradient }}
+        >
+          <Icon className="text-white" size={22} />
         </div>
-        <div className="rounded-full bg-success/15 text-success text-xs font-semibold px-3 py-1.5">+340% Traffic</div>
       </div>
-      <div className="mt-6 flex items-end gap-3 h-32">
-        {bars.map((b) => (
-          <div key={b.m} className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-full rounded-t-lg animate-bar" style={{ height: `${b.h}%`, background: "linear-gradient(180deg, var(--brand-blue), oklch(0.72 0.18 150))" }} />
-            <div className="text-[10px] text-muted-foreground">{b.m}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
-function AdsMockup() {
-  return (
-    <div className="glass-strong rounded-3xl p-6 md:p-8 aspect-[4/3] relative overflow-hidden">
-      <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-brand-orange/15 blur-3xl" />
-      <div className="flex items-center justify-between">
-        <div className="text-xs uppercase tracking-wider text-muted-foreground">Campaign ROI</div>
-        <div className="flex items-center gap-2">
-          <span className="h-6 w-6 rounded-full bg-white/90 grid place-items-center text-[10px] font-bold text-blue-600">G</span>
-          <span className="h-6 w-6 rounded-full bg-white/90 grid place-items-center text-[10px] font-bold text-blue-700">f</span>
-        </div>
-      </div>
-      <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
-        <div className="glass rounded-xl p-3">
-          <div className="text-[10px] text-muted-foreground">Ad Spend</div>
-          <div className="text-base font-bold mt-1">₹50,000</div>
-        </div>
-        <ArrowRight size={18} className="text-brand-orange" />
-        <div className="glass rounded-xl p-3">
-          <div className="text-[10px] text-muted-foreground">Revenue</div>
-          <div className="text-base font-bold mt-1">₹1,85,000</div>
-        </div>
-      </div>
-      <div className="mt-5 rounded-2xl bg-gradient-to-r from-success/15 to-brand-blue/10 border border-success/20 px-4 py-3 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">Return on Investment</span>
-        <span className="text-2xl font-bold text-success">270%</span>
-      </div>
-    </div>
-  );
-}
+      <h3 className="mt-6 text-center text-[20px] font-semibold text-white">{title}</h3>
+      <p className="mt-3 text-center text-sm leading-relaxed text-white/70">{desc}</p>
 
-function BrandMockup() {
-  return (
-    <div className="glass-strong rounded-3xl p-6 md:p-8 aspect-[4/3] relative overflow-hidden">
-      <div className="absolute -bottom-10 -right-10 w-48 h-48 rounded-full bg-brand-orange/15 blur-3xl" />
-      <div className="glass rounded-2xl overflow-hidden">
-        <div className="flex items-center gap-2 px-3 py-2 border-b border-white/5">
-          <div className="h-7 w-7 rounded-full bg-gradient-to-br from-fuchsia-500 via-rose-500 to-amber-400" />
-          <div className="text-xs font-semibold">aprisitydigital</div>
-          <span className="ml-auto text-[10px] text-muted-foreground">2h</span>
-        </div>
-        <div className="h-20 bg-gradient-to-br from-brand-blue/30 to-brand-orange/30 grid place-items-center">
-          <Sparkles size={28} className="text-white/80" />
-        </div>
-        <div className="grid grid-cols-3 text-center text-xs py-2">
-          <div><div className="font-bold">12.4K</div><div className="text-[10px] text-muted-foreground">Likes</div></div>
-          <div className="border-x border-white/5"><div className="font-bold">847</div><div className="text-[10px] text-muted-foreground">Comments</div></div>
-          <div><div className="font-bold">2.1K</div><div className="text-[10px] text-muted-foreground">Shares</div></div>
-        </div>
+      <div className="mt-6 flex justify-center">
+        <span className={`inline-flex items-center rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.5px] ${toneClass}`}>
+          {badge}
+        </span>
       </div>
-      <div className="mt-3 flex items-center justify-between rounded-xl glass px-3 py-2">
-        <span className="text-xs text-muted-foreground">Follower growth</span>
-        <span className="text-sm font-bold text-success">+5,200 this month</span>
-      </div>
-    </div>
+    </motion.div>
   );
 }
 
 function Solutions() {
-  const blocks = [
-    { icon: TrendingUp, t: "Traffic That Converts", d: "SEO + content strategy engineered to attract qualified buyers — not just visitors. We rank you for the keywords that actually drive revenue.", Mock: TrafficMockup },
-    { icon: Target, t: "Ads That Actually Work", d: "Performance marketing built around measurable ROI. Every rupee spent is tracked, tested, and optimized — not just for clicks, but for closed deals.", Mock: AdsMockup },
-    { icon: ShieldCheck, t: "Brand That People Trust", d: "Social media + branding that builds long-term authority. We turn your audience into a community, and your community into customers.", Mock: BrandMockup },
+  const cards = [
+    {
+      icon: TrendingUp,
+      title: "Traffic That Converts",
+      desc: "SEO + content strategy engineered to attract qualified buyers — not just visitors. We rank you for keywords that drive real revenue.",
+      gradient: "linear-gradient(135deg, #4F8EF7, #6366f1)",
+      badge: "+340% Avg. Organic Growth",
+      badgeTone: "green" as const,
+    },
+    {
+      icon: Target,
+      title: "Ads That Actually Work",
+      desc: "Performance marketing built around measurable ROI. Every rupee tracked, tested and optimized — not just for clicks, but closed deals.",
+      gradient: "linear-gradient(135deg, #FF6B35, #f59e0b)",
+      badge: "270% Average Campaign ROI",
+      badgeTone: "orange" as const,
+    },
+    {
+      icon: ShieldCheck,
+      title: "Brand That People Trust",
+      desc: "Social media + branding that builds long-term authority. We turn your audience into a community and your community into customers.",
+      gradient: "linear-gradient(135deg, #10b981, #06b6d4)",
+      badge: "5X Avg. Engagement Growth",
+      badgeTone: "blue" as const,
+    },
   ];
+
   return (
     <Section id="solutions">
       <FadeIn>
         <div className="text-center max-w-3xl mx-auto">
           <Eyebrow>The Solution</Eyebrow>
-          <h2 className="mt-4 text-3xl md:text-5xl font-bold tracking-tight">How We <span className="gradient-text">Transform</span> Your Business</h2>
+          <h2 className="mt-4 text-3xl md:text-5xl font-bold tracking-tight">
+            How We <span className="gradient-text">Transform</span> Your Business
+          </h2>
+          <p className="mt-5 text-base md:text-lg text-muted-foreground">
+            Everything you need to dominate your market — built into one powerful growth system.
+          </p>
         </div>
       </FadeIn>
 
-      <div className="mt-20 space-y-20 md:space-y-24">
-        {blocks.map((b, i) => {
-          const reverse = i % 2 === 1;
-          const Mock = b.Mock;
-          return (
-            <FadeIn key={b.t}>
-              <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
-                <div>
-                  <div className="inline-flex h-14 w-14 rounded-2xl bg-gradient-blue items-center justify-center shadow-glow-blue">
-                    <b.icon className="text-primary-foreground" size={26} />
-                  </div>
-                  <h3 className="mt-5 text-3xl md:text-4xl font-bold tracking-tight">{b.t}</h3>
-                  <p className="mt-4 text-lg text-muted-foreground leading-relaxed">{b.d}</p>
-                  <a href="#services" className="mt-6 inline-flex items-center gap-2 text-brand-orange font-semibold group">
-                    Learn More <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </div>
-                <div className="relative">
-                  <Mock />
-                </div>
-              </div>
-            </FadeIn>
-          );
-        })}
+      <div className="mt-14 grid gap-6 md:grid-cols-3">
+        {cards.map((c, i) => (
+          <SolutionCard key={c.title} {...c} delay={i * 150} />
+        ))}
       </div>
 
-      <FadeIn>
-        <div className="mt-24 grid sm:grid-cols-3 gap-6">
-          {[
-            { v: 300, suffix: "%", l: "Average ROI" },
-            { v: 2, suffix: "X", l: "Lead Growth" },
-            { v: 3, prefix: "Top ", suffix: "", l: "Google Rankings" },
-          ].map((s) => (
-            <div key={s.l} className="glass rounded-2xl p-8 text-center">
-              <div className="text-4xl md:text-5xl font-bold gradient-text">
-                <Counter to={s.v} prefix={s.prefix ?? ""} suffix={s.suffix} />
-              </div>
-              <div className="mt-2 text-muted-foreground">{s.l}</div>
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.6, delay: 0.45, ease: "easeOut" }}
+        className="mt-10 grid sm:grid-cols-3 gap-6"
+      >
+        {[
+          { v: 300, suffix: "%", l: "Average ROI" },
+          { v: 2, suffix: "X", l: "Lead Growth" },
+          { v: 3, prefix: "Top ", suffix: "", l: "Google Rankings" },
+        ].map((s) => (
+          <div
+            key={s.l}
+            className="rounded-2xl p-8 text-center border transition-all duration-300 hover:-translate-y-1"
+            style={{ background: "rgba(255,255,255,0.03)", borderColor: "rgba(255,255,255,0.08)" }}
+          >
+            <div
+              className="text-4xl md:text-5xl font-bold"
+              style={{
+                backgroundImage: "linear-gradient(135deg, #4F8EF7, #a855f7)",
+                WebkitBackgroundClip: "text",
+                backgroundClip: "text",
+                color: "transparent",
+              }}
+            >
+              <Counter to={s.v} prefix={s.prefix ?? ""} suffix={s.suffix} />
             </div>
-          ))}
-        </div>
-      </FadeIn>
+            <div className="mt-2 text-muted-foreground">{s.l}</div>
+          </div>
+        ))}
+      </motion.div>
     </Section>
   );
 }
