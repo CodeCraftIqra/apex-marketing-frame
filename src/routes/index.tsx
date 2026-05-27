@@ -317,11 +317,94 @@ function PainPoints() {
 }
 
 /* ---------- Solutions ---------- */
+function TrafficMockup() {
+  const bars = [
+    { m: "Jan", h: 28 }, { m: "Feb", h: 44 }, { m: "Mar", h: 58 }, { m: "Apr", h: 76 }, { m: "May", h: 96 },
+  ];
+  return (
+    <div className="glass-strong rounded-3xl p-6 md:p-8 aspect-[4/3] relative overflow-hidden">
+      <div className="absolute -bottom-10 -right-10 w-48 h-48 rounded-full bg-brand-blue/20 blur-3xl" />
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="text-xs text-muted-foreground">Organic Traffic</div>
+          <div className="text-2xl font-bold mt-1">+340% <span className="text-sm text-success">▲</span></div>
+        </div>
+        <div className="rounded-full bg-success/15 text-success text-xs font-semibold px-3 py-1.5">+340% Traffic</div>
+      </div>
+      <div className="mt-6 flex items-end gap-3 h-32">
+        {bars.map((b) => (
+          <div key={b.m} className="flex-1 flex flex-col items-center gap-2">
+            <div className="w-full rounded-t-lg animate-bar" style={{ height: `${b.h}%`, background: "linear-gradient(180deg, var(--brand-blue), oklch(0.72 0.18 150))" }} />
+            <div className="text-[10px] text-muted-foreground">{b.m}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function AdsMockup() {
+  return (
+    <div className="glass-strong rounded-3xl p-6 md:p-8 aspect-[4/3] relative overflow-hidden">
+      <div className="absolute -top-10 -left-10 w-48 h-48 rounded-full bg-brand-orange/15 blur-3xl" />
+      <div className="flex items-center justify-between">
+        <div className="text-xs uppercase tracking-wider text-muted-foreground">Campaign ROI</div>
+        <div className="flex items-center gap-2">
+          <span className="h-6 w-6 rounded-full bg-white/90 grid place-items-center text-[10px] font-bold text-blue-600">G</span>
+          <span className="h-6 w-6 rounded-full bg-white/90 grid place-items-center text-[10px] font-bold text-blue-700">f</span>
+        </div>
+      </div>
+      <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+        <div className="glass rounded-xl p-3">
+          <div className="text-[10px] text-muted-foreground">Ad Spend</div>
+          <div className="text-base font-bold mt-1">₹50,000</div>
+        </div>
+        <ArrowRight size={18} className="text-brand-orange" />
+        <div className="glass rounded-xl p-3">
+          <div className="text-[10px] text-muted-foreground">Revenue</div>
+          <div className="text-base font-bold mt-1">₹1,85,000</div>
+        </div>
+      </div>
+      <div className="mt-5 rounded-2xl bg-gradient-to-r from-success/15 to-brand-blue/10 border border-success/20 px-4 py-3 flex items-center justify-between">
+        <span className="text-xs text-muted-foreground">Return on Investment</span>
+        <span className="text-2xl font-bold text-success">270%</span>
+      </div>
+    </div>
+  );
+}
+
+function BrandMockup() {
+  return (
+    <div className="glass-strong rounded-3xl p-6 md:p-8 aspect-[4/3] relative overflow-hidden">
+      <div className="absolute -bottom-10 -right-10 w-48 h-48 rounded-full bg-brand-orange/15 blur-3xl" />
+      <div className="glass rounded-2xl overflow-hidden">
+        <div className="flex items-center gap-2 px-3 py-2 border-b border-white/5">
+          <div className="h-7 w-7 rounded-full bg-gradient-to-br from-fuchsia-500 via-rose-500 to-amber-400" />
+          <div className="text-xs font-semibold">aprisitydigital</div>
+          <span className="ml-auto text-[10px] text-muted-foreground">2h</span>
+        </div>
+        <div className="h-20 bg-gradient-to-br from-brand-blue/30 to-brand-orange/30 grid place-items-center">
+          <Sparkles size={28} className="text-white/80" />
+        </div>
+        <div className="grid grid-cols-3 text-center text-xs py-2">
+          <div><div className="font-bold">12.4K</div><div className="text-[10px] text-muted-foreground">Likes</div></div>
+          <div className="border-x border-white/5"><div className="font-bold">847</div><div className="text-[10px] text-muted-foreground">Comments</div></div>
+          <div><div className="font-bold">2.1K</div><div className="text-[10px] text-muted-foreground">Shares</div></div>
+        </div>
+      </div>
+      <div className="mt-3 flex items-center justify-between rounded-xl glass px-3 py-2">
+        <span className="text-xs text-muted-foreground">Follower growth</span>
+        <span className="text-sm font-bold text-success">+5,200 this month</span>
+      </div>
+    </div>
+  );
+}
+
 function Solutions() {
   const blocks = [
-    { icon: TrendingUp, t: "Traffic That Converts", d: "SEO + content strategy engineered to attract qualified buyers — not just visitors. We rank you for the keywords that actually drive revenue." },
-    { icon: Target, t: "Ads That Actually Work", d: "Performance marketing built around measurable ROI. Every rupee spent is tracked, tested, and optimized — not just for clicks, but for closed deals." },
-    { icon: ShieldCheck, t: "Brand That People Trust", d: "Social media + branding that builds long-term authority. We turn your audience into a community, and your community into customers." },
+    { icon: TrendingUp, t: "Traffic That Converts", d: "SEO + content strategy engineered to attract qualified buyers — not just visitors. We rank you for the keywords that actually drive revenue.", Mock: TrafficMockup },
+    { icon: Target, t: "Ads That Actually Work", d: "Performance marketing built around measurable ROI. Every rupee spent is tracked, tested, and optimized — not just for clicks, but for closed deals.", Mock: AdsMockup },
+    { icon: ShieldCheck, t: "Brand That People Trust", d: "Social media + branding that builds long-term authority. We turn your audience into a community, and your community into customers.", Mock: BrandMockup },
   ];
   return (
     <Section id="solutions">
@@ -335,6 +418,7 @@ function Solutions() {
       <div className="mt-20 space-y-20 md:space-y-24">
         {blocks.map((b, i) => {
           const reverse = i % 2 === 1;
+          const Mock = b.Mock;
           return (
             <FadeIn key={b.t}>
               <div className={`grid lg:grid-cols-2 gap-10 items-center ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
@@ -349,11 +433,7 @@ function Solutions() {
                   </a>
                 </div>
                 <div className="relative">
-                  <div className="glass-strong rounded-3xl p-8 aspect-[4/3] flex items-center justify-center overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-blue opacity-10" />
-                    <b.icon size={140} className="text-brand-blue opacity-80" strokeWidth={1.2} />
-                    <div className="absolute -bottom-10 -right-10 w-48 h-48 rounded-full bg-brand-orange/20 blur-3xl" />
-                  </div>
+                  <Mock />
                 </div>
               </div>
             </FadeIn>
