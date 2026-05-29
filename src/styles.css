@@ -181,4 +181,46 @@
 
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Hero background layers */
+  .hero-radial {
+    background:
+      radial-gradient(85% 70% at 50% -10%,
+        rgba(99,102,241,0.35) 0%,
+        rgba(79,142,247,0.20) 22%,
+        rgba(17,13,91,0.15) 42%,
+        transparent 88%),
+      radial-gradient(40% 40% at 90% 95%,
+        rgba(255,107,53,0.10) 0%,
+        transparent 70%);
+  }
+  .hero-dotgrid {
+    background-image: radial-gradient(rgba(255,255,255,0.18) 1px, transparent 1px);
+    background-size: 22px 22px;
+    opacity: 0.06;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 40%, transparent 100%);
+  }
+
+  /* Shimmer border for badge */
+  @keyframes shimmer-border {
+    0%,100% { box-shadow: 0 0 0 1px rgba(79,142,247,0.30), 0 0 18px -4px rgba(79,142,247,0.35); }
+    50%     { box-shadow: 0 0 0 1px rgba(79,142,247,0.55), 0 0 24px -2px rgba(79,142,247,0.55); }
+  }
+  .animate-shimmer-border { animation: shimmer-border 2.8s ease-in-out infinite; }
+
+  /* Hue cycle for "Data-Driven" gradient text */
+  @keyframes hue-cycle { 0%,100% { filter: hue-rotate(0deg);} 50% { filter: hue-rotate(60deg);} }
+  .animate-hue-cycle { animation: hue-cycle 4s ease-in-out infinite; }
+
+  /* Particles drift */
+  @keyframes drift {
+    0%   { transform: translate(0,0); opacity: 0; }
+    20%  { opacity: 0.6; }
+    100% { transform: translate(var(--dx,40px), var(--dy,-120px)); opacity: 0; }
+  }
+  .particle-dot {
+    position: absolute; width: 4px; height: 4px; border-radius: 9999px;
+    background: rgba(255,255,255,0.5);
+    animation: drift 14s linear infinite;
+  }
 }

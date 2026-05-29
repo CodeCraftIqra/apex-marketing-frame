@@ -227,51 +227,154 @@ function DashboardMockup() {
   );
 }
 
-function Hero() {
+function WordReveal({ text, className = "", delay = 0 }: { text: string; className?: string; delay?: number }) {
+  const words = text.split(" ");
   return (
-    <section id="home" className="relative pt-32 md:pt-36 pb-20 px-5 sm:px-6 md:px-10 overflow-hidden">
-      {/* gradient orbs */}
-      <div className="absolute top-20 -left-20 w-96 h-96 rounded-full bg-brand-blue/20 blur-3xl animate-float" />
-      <div className="absolute top-40 right-0 w-[28rem] h-[28rem] rounded-full bg-brand-orange/15 blur-3xl animate-float-slow" />
-      <div className="absolute bottom-0 left-1/3 w-80 h-80 rounded-full bg-primary/15 blur-3xl animate-pulse-glow" />
+    <span className={className}>
+      {words.map((w, i) => (
+        <span key={i} className="inline-flex overflow-hidden align-bottom mr-[0.25em]">
+          <motion.span
+            initial={{ y: "110%" }}
+            animate={{ y: "0%" }}
+            transition={{ duration: 0.6, delay: delay + i * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+            className="inline-block"
+            dangerouslySetInnerHTML={{ __html: w }}
+          />
+        </span>
+      ))}
+    </span>
+  );
+}
+
+function HeroStat({ to, suffix = "", prefix = "", label, delay }: { to: number; suffix?: string; prefix?: string; label: string; delay: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-40px" });
+  const mv = useMotionValue(0);
+  const rounded = useTransform(mv, (v) => Math.round(v).toLocaleString("en-IN"));
+  useEffect(() => {
+    if (inView) {
+      const c = animate(mv, to, { duration: 2, ease: [0.22, 1, 0.36, 1] });
+      return c.stop;
+    }
+  }, [inView, to, mv]);
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay, ease: "easeOut" }}
+      className="relative glass rounded-2xl p-4 text-center overflow-hidden transition-all hover:-translate-y-1 hover:shadow-glow-blue"
+    >
+      <span className="absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-brand-blue/70 to-transparent" />
+      <div className="text-xl md:text-2xl font-bold text-brand-orange tabular-nums">
+        {prefix}<motion.span>{rounded}</motion.span>{suffix}
+      </div>
+      <div className="text-xs text-muted-foreground mt-1">{label}</div>
+    </motion.div>
+  );
+}
+
+function Hero() {
+  const particles = Array.from({ length: 7 });
+  return (
+    <section id="home" className="relative min-h-screen flex items-center pt-28 md:pt-32 pb-16 px-5 sm:px-6 md:px-10 overflow-hidden">
+      {/* Background layers */}
+      <div className="absolute inset-0 hero-radial pointer-events-none" />
+      <div className="absolute inset-0 hero-dotgrid pointer-events-none" />
       <div className="noise-overlay" />
 
-      <div className="relative mx-auto max-w-7xl grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <FadeIn>
-          <Eyebrow>Performance Marketing Agency</Eyebrow>
-          <h1 className="mt-5 text-4xl md:text-6xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
-            Grow Your Business With <span className="gradient-text">Data-Driven</span> Digital Marketing
+      {/* Floating particles */}
+      {particles.map((_, i) => (
+        <span
+          key={i}
+          className="particle-dot"
+          style={{
+            left: `${(i * 137) % 100}%`,
+            top: `${20 + ((i * 53) % 60)}%`,
+            ['--dx' as string]: `${(i % 2 ? 1 : -1) * (20 + i * 6)}px`,
+            ['--dy' as string]: `-${80 + i * 15}px`,
+            animationDelay: `${i * 1.6}s`,
+            animationDuration: `${12 + i}s`,
+          }}
+        />
+      ))}
+
+      <div className="relative mx-auto w-full max-w-7xl grid lg:grid-cols-2 gap-10 lg:gap-[60px] items-center">
+        {/* LEFT */}
+        <div className="max-w-[580px]">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+            className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-wider text-brand-blue backdrop-blur-md animate-shimmer-border"
+            style={{ background: "rgba(79,142,247,0.08)", border: "1px solid rgba(79,142,247,0.30)" }}
+          >
+            <Sparkles size={14} /> Performance Marketing Agency
+          </motion.div>
+
+          <h1 className="mt-5 text-[2.25rem] sm:text-5xl lg:text-7xl font-extrabold leading-[1.05] tracking-tight">
+            <WordReveal text="Grow Your Business With" delay={0.3} />{" "}
+            <span className="inline-flex overflow-hidden align-bottom mr-[0.25em]">
+              <motion.span
+                initial={{ y: "110%" }}
+                animate={{ y: "0%" }}
+                transition={{ duration: 0.6, delay: 0.3 + 4 * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+                className="inline-block gradient-text animate-hue-cycle"
+              >
+                Data-Driven
+              </motion.span>
+            </span>
+            <WordReveal text="Digital Marketing" delay={0.3 + 5 * 0.08} />
           </h1>
-          <p className="mt-6 text-lg text-muted-foreground max-w-xl leading-relaxed">
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.8, ease: "easeOut" }}
+            className="mt-6 text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed"
+          >
             We help brands scale revenue through SEO, Paid Ads, Social Media & Performance Marketing.
             Results-driven. ROI-focused.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row gap-4">
-            <a href="#contact" className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta px-7 py-3.5 text-base font-semibold text-brand-orange-foreground shadow-glow-orange hover:scale-105 transition-transform animate-cta-pulse">
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 1.0, ease: "easeOut" }}
+            className="mt-8 flex flex-col sm:flex-row gap-4"
+          >
+            <a
+              href="#contact"
+              className="group inline-flex items-center justify-center gap-2 rounded-full bg-gradient-cta px-7 py-3.5 text-base font-semibold text-brand-orange-foreground shadow-glow-orange hover:scale-[1.03] transition-transform animate-cta-pulse"
+            >
               Get Free Strategy Call
               <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
             </a>
-            <a href="#services" className="inline-flex items-center justify-center gap-2 rounded-full border border-border glass px-7 py-3.5 text-base font-semibold hover:border-brand-blue/60 transition-colors">
+            <a
+              href="#services"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-border bg-white/0 px-7 py-3.5 text-base font-semibold hover:bg-white/[0.08] hover:border-brand-blue/60 transition-colors"
+            >
               View Our Work
             </a>
-          </div>
-          <div className="mt-10 grid grid-cols-3 gap-4 max-w-xl">
-            {[
-              { v: "500+", l: "Clients" },
-              { v: "₹50Cr+", l: "Revenue Generated" },
-              { v: "98%", l: "Client Retention" },
-            ].map((t) => (
-              <div key={t.l} className="glass rounded-2xl p-4 text-center">
-                <div className="text-xl md:text-2xl font-bold text-brand-orange">{t.v}</div>
-                <div className="text-xs text-muted-foreground mt-1">{t.l}</div>
-              </div>
-            ))}
-          </div>
-        </FadeIn>
+          </motion.div>
 
-        <FadeIn delay={0.2} y={40}>
+          <div className="mt-10 grid grid-cols-3 gap-3 sm:gap-4 max-w-xl">
+            <HeroStat to={500} suffix="+" label="Clients" delay={1.2} />
+            <HeroStat to={50} prefix="₹" suffix="Cr+" label="Revenue Generated" delay={1.35} />
+            <HeroStat to={98} suffix="%" label="Client Retention" delay={1.5} />
+          </div>
+        </div>
+
+        {/* RIGHT */}
+        <motion.div
+          initial={{ opacity: 0, x: 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+          className="relative mx-auto w-full max-w-[620px]"
+          style={{ filter: "drop-shadow(0 0 80px rgba(79,142,247,0.15))" }}
+        >
           <DashboardMockup />
-        </FadeIn>
+        </motion.div>
       </div>
     </section>
   );
